@@ -24,7 +24,7 @@ const removeContact = catchAsync(async (req, res) => {
   try {
     const { contactId } = req.params;
     await Contact.findByIdAndDelete(contactId);
-    res.status(200).json({ message: 'contact deleted' });
+    res.status(200).json({ message: "contact deleted" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -63,7 +63,7 @@ const updateStatusContact = catchAsync(async (req, res) => {
     const newContact = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
 
     if (!newContact) {
-      return res.status(400).json({ message: 'missing field favorite' });
+      return res.status(400).json({ message: "missing field favorite" });
     }
 
     res.status(200).json(newContact);
@@ -78,5 +78,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-  updateStatusContact,
+  updateStatusContact
 };

@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const userSchema = Schema({
   password: {
     type: String,
-    required: [true, 'Set password for user'],    
+    required: [true, 'Set password for user'],
   },
   email: {
     type: String,
@@ -17,11 +17,18 @@ const userSchema = Schema({
     default: "starter"
   },
   token: String,
-  avatarURL: String
-}, {    
-   versionKey: false,
-})
-  
+  avatarURL: String,
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
+}, {
+  versionKey: false,
+});
 
 userSchema.pre('save', async function(next) {
   try {
@@ -29,14 +36,13 @@ userSchema.pre('save', async function(next) {
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-
-    next();
   } catch (error) {
-    next(error);
+    return next(error);
   }
+
+  next();
 });
 
-  
 const User = model('user', userSchema);
 
 module.exports = User;

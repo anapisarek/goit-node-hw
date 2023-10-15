@@ -8,3 +8,12 @@ exports.userDataValidator = (data) =>
       email: Joi.string().email().required(),           
     })
     .validate(data);
+
+
+exports.verifyEmailValidator = (data) =>
+  Joi.object()
+    .options({ abortEarly: false })
+    .keys({
+      email: Joi.string().email().required(),           
+    })
+    .validate(data);    

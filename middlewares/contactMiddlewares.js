@@ -8,6 +8,7 @@ const { contactDataValidator } = require('../utils/contactValidators');
 exports.checkContactById = catchAsync(async (req, res, next) => {
   try {
     const { contactId } = req.params;
+
     const idIsValid = Types.ObjectId.isValid(contactId);
 
     if (!idIsValid) throw new AppError(400, 'Bad request..');
