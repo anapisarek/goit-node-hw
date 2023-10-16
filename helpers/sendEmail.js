@@ -16,9 +16,14 @@ const nodemailerConfig = {
 const transport = nodemailer.createTransport(nodemailerConfig);
 
 const sendMail = async (data) => {
-	const email = { ...data, from: "anabeblo@gmail.com" };
-	await transport.sendMail(email);
-	return true;
-};
+	try {
+	  const email = { ...data, from: "anabeblo@gmail.com" };
+	  await transport.sendMail(email);
+	  return true;
+	} catch (error) {
+	  console.error("An error occurred while sending an e-mail:", error);
+	  return false;
+	}
+  };
 
 module.exports = sendMail;
