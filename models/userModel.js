@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const userSchema = Schema({
   password: {
     type: String,
-    required: [true, 'Set password for user'],    
+    required: [true, 'Set password for user'],
   },
   email: {
     type: String,
@@ -16,22 +16,33 @@ const userSchema = Schema({
     enum: ["starter", "pro", "business"],
     default: "starter"
   },
-  token: String
-}, {    
-   versionKey: false,
-})
-  
+  token: String,
+  avatarURL: String,
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
+}, {
+  versionKey: false,
+});
 
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
+  try {
+    if (!this.isModified('password')) return next();
 
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (error) {
+    return next(error);
+  }
 
   next();
 });
 
-  
 const User = model('user', userSchema);
 
 module.exports = User;

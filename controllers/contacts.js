@@ -43,17 +43,13 @@ const addContact = catchAsync(async (req, res) => {
 const updateContact = catchAsync(async (req, res) => {
   try {
     const { contactId } = req.params;
-    const newContact = await Contact.findByIdAndUpdate(
-      contactId,
-      {
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone,
-      },
-      {
-        new: true,
-      }
-    );
+    const newContact = await Contact.findByIdAndUpdate(contactId, {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+    }, {
+      new: true,
+    });
     res.status(200).json(newContact);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -65,9 +61,11 @@ const updateStatusContact = catchAsync(async (req, res) => {
     const { contactId } = req.params;
     const { favorite } = req.body;
     const newContact = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
+
     if (!newContact) {
       return res.status(400).json({ message: "missing field favorite" });
     }
+
     res.status(200).json(newContact);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -80,5 +78,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-  updateStatusContact,
+  updateStatusContact
 };
